@@ -7,13 +7,40 @@ The well monitor project is intended to create a docker container to run on a Ra
 Download this project and run.
 
 ```bash
-docker-compose up -d
+docker-compose up --build -d
+```
+
+## Monitor Process
+
+The monitor process should start automatically.
+
+```
+systemctl start monitor
+```
+
+```
+systemctl stop monitor
+```
+
+## Utitlities
+
+On MacOS you can find the serialusb connection by
+
+```
+ls /dev/tty.*
+```
+
+and connect using `cu`
+
+```
+sudo cu -s 19200 -l /dev/tty.usbserial-A6005kdh
 ```
 
 ## Inspiration
 
 - https://www.youtube.com/watch?v=6OxqiEeCvMI
 - https://www.youtube.com/watch?v=AHr94RtMj1A
+- https://gist.github.com/stonehippo/e33750f185806924f1254349ea1a4e68
 
 ## Contributing
 
