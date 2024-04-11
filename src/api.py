@@ -6,13 +6,18 @@ app = FastAPI()
 
 r = redis.Redis(host="redis", port=6379)
 debugpy.listen(("0.0.0.0", 5678))
-#debugpy.wait_for_client()
 
 @app.get("/")
 def read_root():
 	return {"Hello": "World!"}
 
-@app.get("/hits")
+@app.get("/status")
 def read_root():
-	r.incr("hits")
-	return {"number of hits", r.get("hits")}
+	last = r.get("last_logged")
+	length = r.llen("data")
+	return {"data_points": length, "last_logged": last}
+
+@app.get("/data")
+def read_root():
+	data = r.lrange("data", 0, 100)
+	return {"data": data} 

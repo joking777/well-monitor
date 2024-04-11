@@ -6,5 +6,8 @@ COPY ./requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./src ./src
+COPY ./scripts/monitor.service /etc/systemd/system/monitor.service
+COPY ./scripts/start.sh /start.sh
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80", "--reload"]
+RUN chmod +x /start.sh
+RUN apt-get update && apt-get install -y systemctl

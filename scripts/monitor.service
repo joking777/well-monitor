@@ -1,0 +1,9 @@
+[Unit]
+Description=Well Monitor Service
+After=multi-user.target
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/local/bin/python /code/src/monitor.py
+[Install]
+WantedBy=multi-user.target
