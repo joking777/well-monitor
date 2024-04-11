@@ -2,6 +2,7 @@
 import redis
 import json
 import time
+import re
 
 # Connect to Redis
 r = redis.Redis(host="redis", port=6379)
@@ -14,10 +15,27 @@ def parse_log(log_line):
     # Log format: timestamp, depth
     #TODO: Implement the log parsing logic
 
-    return {
-        "timestamp": 0,
-        "depth": 0
-    }
+    # Split the string by spaces
+    parts = log_line.split()
+
+    # Initialize variables
+    timestamp = None
+    value = None
+    log = None
+
+    # Iterate to find timestamp and depth
+    for i in range(len(parts)):
+        if parts[i] == 'D':
+            # The value is the element after 'D'
+            value = str(parts[i+1])
+        elif '#' in parts[i]:
+            # The timestamp is the element before '#' (assuming '#' always follows the timestamp)
+            timestamp = f'{parts[i-2]} {parts[i-1]}'
+    
+    log = f'{timestamp} {value}'
+    
+    return timestamp, value, log
+
 
 def process_log_file(log_file_path):
     '''
@@ -32,7 +50,7 @@ def process_log_file(log_file_path):
 
 
 def parse():
-    # TODO: Add file path. Does we need to fetch the data from somewhere?
+    # TODO: Add file path. Do we need to fetch the data from somewhere?
     log_file_path = 'PATH'
     # Process log file
     process_log_file(log_file_path)
