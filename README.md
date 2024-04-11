@@ -12,15 +12,7 @@ docker-compose up --build -d
 
 ## Monitor Process
 
-The monitor process should start automatically.
-
-```
-systemctl start monitor
-```
-
-```
-systemctl stop monitor
-```
+The monitor process will run in a separate container
 
 ## API
 
