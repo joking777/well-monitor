@@ -22,6 +22,16 @@ systemctl start monitor
 systemctl stop monitor
 ```
 
+## API
+
+### Status
+
+https://localhost/status
+
+### Data
+
+https://localhost/data
+
 ## Utitlities
 
 On MacOS you can find the serialusb connection by
