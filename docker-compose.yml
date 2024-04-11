@@ -1,8 +1,8 @@
 services:
   api:
     build: .
-    container_name: well-monitor
-    command: uvicorn src.api:app --host 0.0.0.0 --port 80 --reload; /start.sh
+    container_name: well-monitor-api
+    command: uvicorn src.api:app --host 0.0.0.0 --port 80 --reload
     ports:
       - 80:80
       - 5678:5678
@@ -10,14 +10,18 @@ services:
       - .:/code
     depends_on:
       - redis
-  #monitor:
-  #  build: .
-  #  command: ./start.sh
-  #  volumes:
-  #    - .:/code
+  monitor:
+    build: .
+    container_name: well-monitor-monitor
+    command: /usr/local/bin/python /code/src/monitor.py
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOGLEVEL=INFO
+    volumes:
+      - .:/code
   #  #devices:
   #  #  - /dev/tty.usbserial-14520
-  #  depends_on:
-  #    - redis      
+    depends_on:
+      - redis      
   redis:
     image: redis:alpine
