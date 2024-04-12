@@ -17,6 +17,8 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - LOGLEVEL=INFO
+      - SERIALPORT=/dev/ttyUSB0
+      - BAUDRATE=19200
     volumes:
       - .:/code
   #  #devices:
