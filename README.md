@@ -10,6 +10,37 @@ Download this project and run.
 docker-compose up --build -d
 ```
 
+### Raspberry Pi
+
+Install docker
+
+https://devops.stackexchange.com/questions/5192/how-to-install-docker-in-raspbian-virtual-machine
+
+```
+apt install docker.io
+```
+
+Install docker-compose
+
+https://medium.com/@vinothsubramanian/how-to-install-docker-compose-in-raspberry-pi-4a11e6314bbb
+
+```
+sudo curl -L https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-`uname -s`-`uname -m` > docker-compose
+sudo mv docker-compose /usr/bin/
+sudo chown root: /usr/bin/docker-compose
+sudo chmod +x /usr/bin/docker-compos
+```
+
+Docker permissions
+
+https://phoenixnap.com/kb/docker-permission-denied
+
+```
+sudo groupadd -f docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
 ## Monitor Process
 
 The monitor process will run in a separate container
