@@ -1,14 +1,24 @@
 #!/bin/bash
 
 echo starting socat
-# socat pty,raw,echo=0,link=/dev/ttyS20 pty,raw,echo=0,link=/dev/ttyS21
-# socat pty,link=/dev/ttyS20,raw tcp:monitor:4001
-# socat SYSTEM:"/dev/ttyS20,raw,echo=0" TCP:monitor:4001
-(socat /dev/ttyS20,raw,echo=0 TCP:well-monitor-monitor:4001) &
-# socat /dev/ttyS20,raw,echo=0 TCP:172.20.0.4:4001
 
+echo COMPOSE_PROFILES: $COMPOSE_PROFILES
+echo LOG_LEVEL: $LOG_LEVEL
+echo SERIAL_PORT: $SERIAL_PORT
+echo BAUD_RATE: $BAUD_RATE
+echo LOG_FREQUENCY: $LOG_FREQUENCY
 
-# socat TCP4-LISTEN:4001,reuseaddr,fork SYSTEM:"/dev/ttyS20,raw.echo=0"
+echo Creating virtual serial port...
+(socat pty,raw,echo=0,link=$SERIAL_PORT pty,raw,echo=0,link=/dev/ttyS21) &
 
-echo starting simulator service
+until [ -L /dev/ttyS21 ]
+do
+    echo Checking if /dev/ttyS21 exists...
+    sleep 3
+done
+
+echo Creating virtual serial port tunnel...
+(socat /dev/ttyS21,raw,echo=0 TCP:well-monitor-monitor:4001) &
+
+echo Starting simulator service...
 /usr/local/bin/python /code/src/simulator.py

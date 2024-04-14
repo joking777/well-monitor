@@ -1,0 +1,4 @@
+services:
+  monitor:
+    devices:
+      - /dev/ttyUSB0

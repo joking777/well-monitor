@@ -1,16 +1,15 @@
 import os
 import logging
-import time
 import serial
 from datetime import datetime
 import redis
 import json
 
-log_level = os.environ.get('LOGLEVEL', 'ERROR').upper()
-redis_host = os.environ.get('REDISHOST', 'redis')
-redis_port = os.environ.get('REDISPORT', 6379)
-serial_port = os.environ.get('SERIALPORT', '/dev/ttyUSB0')
-baud_rate = os.environ.get('BAUDRATE', 19200)
+log_level = os.environ.get('LOG_LEVEL', 'ERROR').upper()
+redis_host = os.environ.get('REDIS_HOST', 'redis')
+redis_port = os.environ.get('REDIS_PORT', 6379)
+serial_port = os.environ.get('SERIAL_PORT', '/dev/ttyUSB0')
+baud_rate = os.environ.get('BAUD_RATE', 19200)
 
 logging.basicConfig(
     level=log_level,
@@ -25,10 +24,9 @@ l = serial.Serial(serial_port, baud_rate, timeout=None)
 while l.isOpen() != True:
     logging.error('Waiting for port ' + serial_port)
 
-print("Get data now...")
-
 while True:
-    #2023/04/10 19:21:11 #000 D  34.38 T 75.0 B16.27 G729 R 0
+    logging.info("Monitor waiting for data...")
+    #/r>>2023/04/10 19:21:11 #000 D  34.38 T 75.0 B16.27 G729 R 0/r/n
     timestamp = str(datetime.now())
     r.set("last_logged",timestamp)
 
@@ -48,3 +46,4 @@ while True:
     logging.info(json_str)
     r.lpush("data", json_str)
     r.ltrim("data", 0, 99)
+

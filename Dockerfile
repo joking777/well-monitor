@@ -14,5 +14,5 @@ RUN chmod +x /start-monitor.sh
 COPY ./scripts/start-simulator.sh /start-simulator.sh
 RUN chmod +x /start-simulator.sh
 
-RUN apt-get update && apt-get install -y systemctl cu socat iputils-ping
+RUN apt-get update && apt-get install -y cu socat iputils-ping
 

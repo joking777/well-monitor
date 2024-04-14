@@ -17,28 +17,31 @@ services:
       - dialout
     command: /start-monitor.sh
     environment:
-      - PYTHONUNBUFFERED=1
-      - LOGLEVEL=INFO
-      - SERIALPORT=/dev/ttyUSB0
-      - BAUDRATE=19200
+      - PYTHONUNBUFFERED
+      - LOG_LEVEL
+      - SERIAL_PORT
+      - BAUD_RATE
+      - COMPOSE_PROFILES
     volumes:
       - .:/code
-    devices:
-      - /dev/ttyUSB0
     depends_on:
       - redis
-  # simulator:
-  #   build: .
-  #   container_name: well-monitor-simulator
-  #   command: /start-simulator.sh
-  #   environment:
-  #     - PYTHONUNBUFFERED=1
-  #     - LOGLEVEL=INFO
-  #     - SERIALPORT=/dev/ttyS20
-  #     - BAUDRATE=19200
-  #   volumes:
-  #     - .:/code
-  #   depends_on:
-  #     - monitor
+  simulator:
+    build: .
+    container_name: well-monitor-simulator
+    command: /start-simulator.sh
+    profiles:
+      - simulate
+    environment:
+      - PYTHONUNBUFFERED
+      - LOG_LEVEL
+      - SERIAL_PORT
+      - BAUD_RATE
+      - LOG_FREQUENCY
+      - COMPOSE_PROFILES
+    volumes:
+      - .:/code
+    depends_on:
+      - monitor
   redis:
     image: redis:alpine

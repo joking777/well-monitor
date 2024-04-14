@@ -1,14 +1,23 @@
 #!/bin/bash
 
-# echo starting socat null modem
-# (socat pty,raw,echo=0,link=/dev/ttyS20 pty,raw,echo=0,link=/dev/ttyS21) &
+echo COMPOSE_PROFILES: $COMPOSE_PROFILES
+echo LOG_LEVEL: $LOG_LEVEL
+echo SERIAL_PORT: $SERIAL_PORT
+echo BAUD_RATE: $BAUD_RATE
 
-# echo starting socat tcp listener
-# (socat open:/dev/ttyS21,nonblock,echo=0,raw TCP-LISTEN:4001,reuseaddr,fork) &
+if [[ "$COMPOSE_PROFILES" =~ "simulate" ]]; then
 
-# (socat TCP4-LISTEN:4001,reuseaddr,fork SYSTEM:"/dev/ttyS20,raw.echo=0") &
-# socat TCP-LISTEN:4001,reuseaddr,fork SYSTEM:"/dev/ttyS20"
-# socat TCP-LISTEN:4001,reuseaddr,fork PTY,link=/dev/ttyS20
+    echo Creating virtual serial port...
+    (socat pty,raw,echo=0,link=$SERIAL_PORT pty,raw,echo=0,link=/dev/ttyS21) &
+
+    until [ -L /dev/ttyS21 ]
+    do
+        echo Checking if /dev/ttyS21 exists...
+        sleep 3
+    done
+    echo Creating virtual serial port tunnel...
+    (socat open:/dev/ttyS21,nonblock,echo=0,raw TCP-LISTEN:4001,reuseaddr,fork) &
+fi
 
 echo starting monitor service
 /usr/local/bin/python /code/src/monitor.py
