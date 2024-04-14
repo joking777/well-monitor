@@ -27,8 +27,6 @@ while l.isOpen() != True:
 
 print("Get data now...")
 
-r.ltrim("data")
-
 while True:
     #2023/04/10 19:21:11 #000 D  34.38 T 75.0 B16.27 G729 R 0
     timestamp = str(datetime.now())
@@ -49,3 +47,4 @@ while True:
 
     logging.info(json_str)
     r.lpush("data", json_str)
+    r.ltrim("data", 0, 99)
