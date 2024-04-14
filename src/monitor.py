@@ -4,6 +4,7 @@ import time
 import serial
 from datetime import datetime
 import redis
+import json
 
 log_level = os.environ.get('LOGLEVEL', 'ERROR').upper()
 redis_host = os.environ.get('REDISHOST', 'redis')
@@ -26,6 +27,8 @@ while l.isOpen() != True:
 
 print("Get data now...")
 
+r.ltrim("data")
+
 while True:
     #2023/04/10 19:21:11 #000 D  34.38 T 75.0 B16.27 G729 R 0
     timestamp = str(datetime.now())
@@ -33,9 +36,16 @@ while True:
 
     raw_data = l.read_until()
     raw_data.strip()
-    output = str(raw_data)
-    print(output)
+    output = str(raw_data, encoding='utf-8')
 
-    logging.info(output)
-    r.lpush("data", output)
-    
+    obj = {
+        "timestamp": output[3:22],
+        "depth": float(output[29:36]),
+        "temperature": float(output[38:43]),
+        "barometer": float(output[45:50])
+    }
+
+    json_str = json.dumps(obj)
+
+    logging.info(json_str)
+    r.lpush("data", json_str)
