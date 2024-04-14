@@ -6,6 +6,16 @@ The well monitor project is intended to create a docker container to run on a Ra
 
 Download this project and run.
 
+Add the following `.env` to run in simulation mode
+```
+PYTHONUNBUFFERED=1
+LOG_LEVEL=INFO
+SERIAL_PORT=/dev/ttyS20
+BAUD_RATE=19200
+LOG_FREQUENCY=1
+COMPOSE_PROFILES=simulate
+```
+
 ```bash
 docker-compose up --build -d
 ```
