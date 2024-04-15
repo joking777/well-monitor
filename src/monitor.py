@@ -10,6 +10,7 @@ redis_host = os.environ.get('REDIS_HOST', 'redis')
 redis_port = os.environ.get('REDIS_PORT', 6379)
 serial_port = os.environ.get('SERIAL_PORT', '/dev/ttyUSB0')
 baud_rate = os.environ.get('BAUD_RATE', 19200)
+data_size = os.environ.get('DATA_SIZE', 99)
 
 logging.basicConfig(
     level=log_level,
@@ -45,5 +46,5 @@ while True:
 
     logging.info(json_str)
     r.lpush("data", json_str)
-    r.ltrim("data", 0, 99)
+    r.ltrim("data", 0, data_size)
 

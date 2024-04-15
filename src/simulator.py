@@ -30,8 +30,9 @@ logging.info("Simulator opened serial port " + serial_port + "...")
 while True:
     #2023/04/10 19:21:11 #000 D  34.38 T 75.0 B16.27 G729 R 0
     timestamp = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-    output = "\r>>" + timestamp + " #000 D  34.38 T 75.0 B16.27 G729 R 0\r\n"
+    output = ">>" + timestamp + " #000 D  34.38 T 75.0 B16.27 G729 R 0"
     logging.info(output)
+    output = "\r" + output + "\r\n"
     w.write(output.encode())
     logging.info("Sleeping for " + log_frequency + " seconds")
     time.sleep(int(log_frequency))
