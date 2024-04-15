@@ -1,0 +1,14 @@
+services:
+  simulator:
+    build: .
+    container_name: well-monitor-simulator
+    command: /start-simulator.sh
+    environment:
+      - PYTHONUNBUFFERED
+      - LOG_LEVEL
+      - SERIAL_PORT
+      - BAUD_RATE
+      - LOG_FREQUENCY
+      - COMPOSE_PROFILES
+    volumes:
+      - .:/code

@@ -13,15 +13,35 @@ services:
   monitor:
     build: .
     container_name: well-monitor-monitor
-    command: /usr/local/bin/python /code/src/monitor.py
+    group_add:
+      - dialout
+    command: /start-monitor.sh
     environment:
-      - PYTHONUNBUFFERED=1
-      - LOGLEVEL=INFO
+      - PYTHONUNBUFFERED
+      - LOG_LEVEL
+      - SERIAL_PORT
+      - BAUD_RATE
+      - COMPOSE_PROFILES
     volumes:
       - .:/code
-  #  #devices:
-  #  #  - /dev/tty.usbserial-14520
     depends_on:
-      - redis      
+      - redis
+  simulator:
+    build: .
+    container_name: well-monitor-simulator
+    command: /start-simulator.sh
+    profiles:
+      - simulate
+    environment:
+      - PYTHONUNBUFFERED
+      - LOG_LEVEL
+      - SERIAL_PORT
+      - BAUD_RATE
+      - LOG_FREQUENCY
+      - COMPOSE_PROFILES
+    volumes:
+      - .:/code
+    depends_on:
+      - monitor
   redis:
     image: redis:alpine
