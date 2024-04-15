@@ -56,11 +56,11 @@ The monitor process will run in a separate container
 
 ### Status
 
-https://localhost/status
+https://localhost/api/status
 
-### Data
+### Current Data
 
-https://localhost/data
+https://localhost/api/current
 
 ## Utitlities
 
