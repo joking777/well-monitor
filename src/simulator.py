@@ -34,5 +34,5 @@ while True:
     logging.info(output)
     output = "\r" + output + "\r\n"
     w.write(output.encode())
-    logging.info("Sleeping for " + log_frequency + " seconds")
+    logging.info("Sleeping for " + str(log_frequency) + " seconds")
     time.sleep(int(log_frequency))
