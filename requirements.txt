@@ -3,3 +3,6 @@ uvicorn
 redis
 debugpy
 pyserial
+fasthx
+pydantic
+Jinja2

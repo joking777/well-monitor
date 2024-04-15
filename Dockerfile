@@ -6,8 +6,13 @@ COPY ./requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./src ./src
-COPY ./scripts/monitor.service /etc/systemd/system/monitor.service
-COPY ./scripts/start.sh /start.sh
+#COPY ./scripts/monitor.service /etc/systemd/system/monitor.service
 
-RUN chmod +x /start.sh
-RUN apt-get update && apt-get install -y systemctl
+COPY ./scripts/start-monitor.sh /start-monitor.sh
+RUN chmod +x /start-monitor.sh
+
+COPY ./scripts/start-simulator.sh /start-simulator.sh
+RUN chmod +x /start-simulator.sh
+
+RUN apt-get update && apt-get install -y cu socat iputils-ping
+
