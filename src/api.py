@@ -1,11 +1,11 @@
+import json
 from fastapi import FastAPI, Response
 import redis
 import os
 import debugpy
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
-
 from fasthx import Jinja
+from .core.models.Reading import Reading
 
 app = FastAPI()
 
@@ -27,17 +27,37 @@ jinja = Jinja(templates)
 
 @app.get("/")
 @jinja.page("index.html")
-def index() -> None:
-    """This route serves the index.html template."""
-    ...
+def index() -> Reading:
+	data = r.lrange("data", 0, 0)[0]
+	item = json.loads(data)
+	response = Reading(
+		timestamp=item['timestamp'], 
+		depth=item['depth'],
+		temperature=item['temperature'], 
+		barometer=item['barometer']
+		)
+	return response
 
 @app.get("/status")
-def read_root():
+def get_status():
 	last = r.get("last_logged")
 	length = r.llen("data")
 	return {"data_points": length, "last_logged": last}
 
+@app.get("/current")
+def get_current():
+	data = r.lrange("data", 0, 0)[0]
+	return json.loads(data)
+
 @app.get("/data")
-def read_root():
+@jinja.page("data.html")
+def get_data() -> list[Reading]:
 	data = r.lrange("data", 0, 100)
-	return {"data": data} 
+	json_data = [json.loads(item) for item in data]
+	response_data = [Reading(
+		timestamp=item['timestamp'], 
+		depth=item['depth'],
+		temperature=item['temperature'], 
+		barometer=item['barometer']
+		) for item in json_data]
+	return response_data

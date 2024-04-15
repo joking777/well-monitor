@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
-{% block header %}
-<title>fasthx example with Jinja2</title>
-{% endblock header %}
 
 {% block content %}
 
-<h1 class="mb-3">fasthx example with Jinja2</h1>
+<div class="container">
+    <h1>Current Reading</h1>
+    <div class="">
+        <p><span class="label">Timestamp:</span> {{ timestamp }}</p>
+        <p><span class="label">Depth:</span> {{ depth }}</p>
+        <p><span class="label">Temperature:</span> {{ '%.2f'|format(temperature) }}</p>
+        <p><span class="label">Barometer:</span> {{ '%.2f'|format(barometer)}}</p>
+
+        
+    </div>
+</div>
 
 {% endblock content %}
