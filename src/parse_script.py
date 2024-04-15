@@ -1,8 +1,6 @@
 # Imports
 import redis
 import json
-import time
-import re
 
 # Connect to Redis
 r = redis.Redis(host="redis", port=6379)
@@ -11,9 +9,6 @@ def parse_log(log_line):
     '''
     Parse a single log line and extract relevant data.
     '''
-
-    # Log format: timestamp, depth
-    #TODO: Implement the log parsing logic
 
     # Split the string by spaces
     parts = log_line.split()
