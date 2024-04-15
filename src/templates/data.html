@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<ul class="list-group">
+    {% for reading in items %}
+        <li class="list-group-item"> Timestamp: {{reading.timestamp}} Depth: {{reading.depth}} Temperature: {{reading.temperature}}</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}
+

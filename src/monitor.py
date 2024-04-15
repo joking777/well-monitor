@@ -3,12 +3,13 @@ import logging
 import serial
 from datetime import datetime
 import redis
-import json
+from core.models.Reading import Reading
 
 log_level = os.environ.get('LOG_LEVEL', 'ERROR').upper()
 redis_host = os.environ.get('REDIS_HOST', 'redis')
 redis_port = os.environ.get('REDIS_PORT', 6379)
 serial_port = os.environ.get('SERIAL_PORT', '/dev/ttyUSB0')
+# BAUD Rate in the context of a serial port is the number of bits that can be transferred per second
 baud_rate = os.environ.get('BAUD_RATE', 19200)
 data_size = os.environ.get('DATA_SIZE', 99)
 
@@ -35,16 +36,13 @@ while True:
     raw_data.strip()
     output = str(raw_data, encoding='utf-8')
 
-    obj = {
-        "timestamp": output[3:22],
-        "depth": float(output[29:36]),
-        "temperature": float(output[38:43]),
-        "barometer": float(output[45:50])
-    }
-
-    json_str = json.dumps(obj)
-
-    logging.info(json_str)
-    r.lpush("data", json_str)
+    reading = Reading(
+        timestamp=output[3:22], 
+        depth=float(output[29:36]),
+        temperature=float(output[38:43]),
+        barometer=float(output[45:50]),
+        )
+    
+    r.lpush("data", reading.model_dump_json())
     r.ltrim("data", 0, data_size)
 
