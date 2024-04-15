@@ -4,6 +4,8 @@ import serial
 from datetime import datetime
 import redis
 from core.models.Reading import Reading
+# Local Imports
+from parse_script import parse_log
 
 log_level = os.environ.get('LOG_LEVEL', 'ERROR').upper()
 redis_host = os.environ.get('REDIS_HOST', 'redis')
@@ -12,6 +14,8 @@ serial_port = os.environ.get('SERIAL_PORT', '/dev/ttyUSB0')
 # BAUD Rate in the context of a serial port is the number of bits that can be transferred per second
 baud_rate = os.environ.get('BAUD_RATE', 19200)
 data_size = os.environ.get('DATA_SIZE', 99)
+
+
 
 logging.basicConfig(
     level=log_level,
