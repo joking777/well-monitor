@@ -38,13 +38,13 @@ def index() -> Reading:
 		)
 	return response
 
-@app.get("/status")
+@app.get("/api/status")
 def get_status():
 	last = r.get("last_logged")
 	length = r.llen("data")
 	return {"data_points": length, "last_logged": last}
 
-@app.get("/current")
+@app.get("/api/current")
 def get_current():
 	data = r.lrange("data", 0, 0)[0]
 	return json.loads(data)
