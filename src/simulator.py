@@ -3,6 +3,7 @@ import logging
 import time
 import serial
 from datetime import datetime
+from connections.serial_port_client import serial_port_client
 
 MIN_DEPTH=50
 MAX_DEPTH=250
@@ -20,10 +21,8 @@ logging.basicConfig(
 
 logging.info("Starting simulator...")
 
-w = serial.Serial(serial_port, baud_rate, write_timeout=0)
-
-if w.isOpen() != True:
-    w.open()
+if serial_port_client.isOpen() != True:
+    serial_port_client.open()
 
 logging.info("Simulator opened serial port " + serial_port + "...")
 
@@ -33,6 +32,6 @@ while True:
     output = ">>" + timestamp + " #000 D  34.38 T 75.0 B16.27 G729 R 0"
     logging.info(output)
     output = "\r" + output + "\r\n"
-    w.write(output.encode())
+    serial_port_client.write(output.encode())
     logging.info("Sleeping for " + str(log_frequency) + " seconds")
     time.sleep(int(log_frequency))
