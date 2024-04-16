@@ -1,0 +1,29 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+      "standard": {
+        "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      }
+    },
+    "handlers": {
+      "file_handler": {
+        "class": "logging.FileHandler",
+        "formatter": "standard",
+        "filename": "app.log",
+        "mode": "a"
+      },
+      "console_handler": {
+        "class": "logging.StreamHandler",
+        "formatter": "standard",
+        "stream": "ext://sys.stdout"
+      }
+    },
+    "loggers": {
+      "": {
+        "handlers": ["file_handler", "console_handler"],
+        "level": "DEBUG"
+      }
+    }
+  }
+  
