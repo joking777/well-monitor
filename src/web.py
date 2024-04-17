@@ -4,7 +4,7 @@ import os
 from fastapi.templating import Jinja2Templates
 from fasthx import Jinja
 from .core.models.Reading import Reading
-from .connections.redis_client import redis_client
+from .connections._redis_client import _redis_client
 
 app = FastAPI()
 
@@ -24,7 +24,7 @@ jinja = Jinja(templates)
 @app.get("/")
 @jinja.page("index.html")
 def index() -> Reading:
-	data = redis_client.lrange("data", 0, 0)[0]
+	data = _redis_client.lrange("data", 0, 0)[0]
 	item = json.loads(data)
 	response = Reading(
 		timestamp=item['timestamp'], 
@@ -36,19 +36,19 @@ def index() -> Reading:
 
 @app.get("/api/status")
 def get_status():
-	last = redis_client.get("last_logged")
-	length = redis_client.llen("data")
+	last = _redis_client.get("last_logged")
+	length = _redis_client.llen("data")
 	return {"data_points": length, "last_logged": last}
 
 @app.get("/api/current")
 def get_current():
-	data = redis_client.lrange("data", 0, 0)[0]
+	data = _redis_client.lrange("data", 0, 0)[0]
 	return json.loads(data)
 
 @app.get("/data")
 @jinja.page("data.html")
 def get_data() -> list[Reading]:
-	data = redis_client.lrange("data", 0, 100)
+	data = _redis_client.lrange("data", 0, 100)
 	json_data = [json.loads(item) for item in data]
 	response_data = [Reading(
 		timestamp=item['timestamp'], 
