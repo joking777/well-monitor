@@ -5,12 +5,19 @@
 <div class="container">
     <h1>Current Reading</h1>
     <div class="">
-        <p><span class="label">Timestamp:</span> {{ timestamp }}</p>
-        <p><span class="label">Depth:</span> {{ depth }}</p>
-        <p><span class="label">Temperature:</span> {{ '%.2f'|format(temperature) }}</p>
-        <p><span class="label">Barometer:</span> {{ '%.2f'|format(barometer)}}</p>
+        <p><span class="label">Timestamp:</span> {{ reading.timestamp }}</p>
+        <p><span class="label">Depth:</span> {{ reading.depth }}</p>
+        <p><span class="label">Temperature:</span> {{ '%.2f'|format(reading.temperature) }}</p>
+        <p><span class="label">Barometer:</span> {{ '%.2f'|format(reading.barometer)}}</p>
 
-        
+        <p><span class="label">Current Weather:</span>{{ '%.2f'|format(weather.current.temp) }}</p>
+        <p><span class="label">Forecast:</span></p>
+        <ul class="list-group">
+        {% for day in weather.daily %}
+            <li class="list-group-item"> Timestamp: {{day.dt}} Summary: {{day.summary}} Temp: {{day.temp.day}} Rain: {{day.rain}} Clouds: {{day.clouds}} Wind: {{day.wind_speed}}</li>
+        {% endfor %}
+        </ul>
+    
     </div>
 </div>
 

@@ -10,6 +10,7 @@ from config._logger import _logger
 
 api_url = os.environ.get('WEATHER_API_URL')
 api_key = os.environ.get('WEATHER_API_KEY')
+frequency = int(os.environ.get('WEATHER_CHECK_FREQUENCY', 1))
 lat = os.environ.get('LAT')
 lon = os.environ.get('LON')
 
@@ -37,11 +38,11 @@ while api_key != None:
             _logger.info('Calling weather API...')
             response = requests.get(URL)
             if(response.status_code == 200):
-                _redis_client.set('weather_forcast', json.dumps(response.json()))
+                _redis_client.set('weather_forecast', json.dumps(response.json()))
             else:
                 _logger.error('Response code: ' + str(response.status_code))
 
             _redis_client.set('weather_forecast_last_check', str(timestamp))
-            _redis_client.set('weather_forecast_next_check', str(timestamp + timedelta(minutes=1)))
+            _redis_client.set('weather_forecast_next_check', str(timestamp + timedelta(**{'hours': frequency})))
     
-    time.sleep(MINUTE_IN_SECONDS)
+    time.sleep(frequency * HOUR_IN_SECONDS)

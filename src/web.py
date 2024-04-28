@@ -23,15 +23,20 @@ jinja = Jinja(templates)
 
 @app.get("/")
 @jinja.page("index.html")
-def index() -> Reading:
+def index() -> dict:
 	data = _redis_client.lrange("data", 0, 0)[0]
 	item = json.loads(data)
-	response = Reading(
+	weather_data = _redis_client.get("weather_forecast")
+	if weather_data != None:
+		weather = json.loads(weather_data)
+	response = {"reading": Reading(
 		timestamp=item['timestamp'], 
 		depth=item['depth'],
 		temperature=item['temperature'], 
 		barometer=item['barometer']
-		)
+		),
+		"weather": weather
+	}
 	return response
 
 @app.get("/api/status")
