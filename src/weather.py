@@ -1,42 +1,47 @@
 import os
-import logging
-import redis
 import time
+import requests
+import json
 from datetime import datetime, timedelta
+from connections._redis_client import _redis_client
 
-log_level = os.environ.get('LOG_LEVEL', 'ERROR').upper()
-redis_host = os.environ.get('REDIS_HOST', 'redis')
-redis_port = os.environ.get('REDIS_PORT', 6379)
+# Get the logger instance
+from config._logger import _logger
 
-logging.basicConfig(
-    level=log_level,
-    format='%(levelname)s\t%(message)s'
-)
-
-r = redis.Redis(host=redis_host, port=redis_port, decode_responses=True)
+api_url = os.environ.get('WEATHER_API_URL')
+api_key = os.environ.get('WEATHER_API_KEY')
+lat = os.environ.get('LAT')
+lon = os.environ.get('LON')
 
 HOUR_IN_SECONDS = 60 * 60
-MINUTE_IN_SECONDS = 60;
+MINUTE_IN_SECONDS = 60
 DEFAULT_TIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
+URL=f'{api_url}?lat={lat}&lon={lon}&appid={api_key}'
 
-r.set('weather_forecast_next_check', str(datetime.now() + timedelta(minutes=1)))
+if api_key == None:
+    _logger.error('Weather api not set in .env file')
+else:
+    _logger.info('Weather lookup url: ' + URL)
 
-while True:
-    logging.info("Checking weather data...")
+while api_key != None:
+    _logger.info('Checking weather data...')
     timestamp = datetime.now()
-    next_check_str = r.get('weather_forecast_next_check')
+    next_check_str = _redis_client.get('weather_forecast_next_check')
 
-    logging.info(next_check_str)
+    _logger.info('Next weather check: ' + next_check_str)
 
     if next_check_str != None:
         next_check = datetime.strptime(next_check_str, DEFAULT_TIME_FORMAT)
 
-        logging.info("Next check: " + str(next_check))
-        logging.info("Current time: " + str(timestamp))
-
         if next_check < timestamp:
-            logging.info("Calling weather API...")
-            r.set('weather_forecast_last_check', str(timestamp))
-            r.set('weather_forecast_next_check', str(timestamp + timedelta(minutes=1)))
+            _logger.info('Calling weather API...')
+            response = requests.get(URL)
+            if(response.status_code == 200):
+                _redis_client.set('weather_forcast', json.dumps(response.json()))
+            else:
+                _logger.error('Response code: ' + str(response.status_code))
+
+            _redis_client.set('weather_forecast_last_check', str(timestamp))
+            _redis_client.set('weather_forecast_next_check', str(timestamp + timedelta(minutes=1)))
     
     time.sleep(MINUTE_IN_SECONDS)

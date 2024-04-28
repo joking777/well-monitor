@@ -49,6 +49,7 @@ services:
     command: /start-weather.sh
     environment:
       - LOG_LEVEL
+      - WEATHER_API_URL
       - WEATHER_API_KEY
       - LON
       - LAT
