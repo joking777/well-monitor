@@ -16,7 +16,7 @@ lon = os.environ.get('LON')
 HOUR_IN_SECONDS = 60 * 60
 MINUTE_IN_SECONDS = 60
 DEFAULT_TIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
-URL=f'{api_url}?lat={lat}&lon={lon}&appid={api_key}'
+URL=f'{api_url}?exclude=minutely,hourly&lat={lat}&lon={lon}&appid={api_key}'
 
 if api_key == None:
     _logger.error('Weather api not set in .env file')
