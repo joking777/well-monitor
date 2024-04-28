@@ -13,5 +13,8 @@ RUN chmod +x /start-monitor.sh
 COPY ./scripts/start-simulator.sh /start-simulator.sh
 RUN chmod +x /start-simulator.sh
 
+COPY ./scripts/start-weather.sh /start-weather.sh
+RUN chmod +s /start-weather.sh
+
 RUN apt-get update && apt-get install -y cu socat iputils-ping
 

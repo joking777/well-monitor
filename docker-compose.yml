@@ -43,5 +43,18 @@ services:
       - .:/code
     depends_on:
       - monitor
+  weather:
+    build: .
+    container_name: well-monitor-weather
+    command: /start-weather.sh
+    environment:
+      - LOG_LEVEL
+      - WEATHER_API_KEY
+      - LON
+      - LAT
+    volumes:
+      - .:/code
+    depends_on:
+      - redis      
   redis:
     image: redis:alpine
