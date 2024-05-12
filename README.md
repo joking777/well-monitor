@@ -81,6 +81,8 @@ sudo cu -s 19200 -l /dev/tty.usbserial-A6005kdh
 - https://www.youtube.com/watch?v=6OxqiEeCvMI
 - https://www.youtube.com/watch?v=AHr94RtMj1A
 - https://gist.github.com/stonehippo/e33750f185806924f1254349ea1a4e68
+- https://renogy.boards.net/thread/491/solved-help-renogy-rover-raspberry
+- https://github.com/corbinbs/solarshed
 
 ## Contributing
 
