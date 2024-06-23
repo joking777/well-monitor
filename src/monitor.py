@@ -27,7 +27,7 @@ while True:
 
     raw_data = serial_port_client.read_until()
     raw_data.strip()
-    output = str(raw_data, encoding='utf-8')
+    output = str(raw_data, encoding='utf-8', errors='ignore')
 
     reading = Reading(
         timestamp=output[3:22], 
