@@ -48,6 +48,10 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
+```bash
+docker-compose -f docker-compose.yml -f docker-compose-live.yml up --build
+```
+
 ## Monitor Process
 
 The monitor process will run in a separate container
