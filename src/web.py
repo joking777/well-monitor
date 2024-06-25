@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from fasthx import Jinja
 from .core.models.Reading import Reading
 from .connections._redis_client import _redis_client
+from .core.graphs.sparkline import sparkline
 
 app = FastAPI()
 
@@ -44,6 +45,14 @@ def get_status():
 def get_current():
 	data = _redis_client.lrange("data", 0, 0)[0]
 	return json.loads(data)
+
+@app.get("/api/sparkline", responses = { 200: { "content": { "image/png": {} } } } )
+def get_sparkline():
+	data = _redis_client.lrange("data", 0, 100)
+	json_data = [json.loads(item) for item in data]
+	response_data = [item['depth'] for item in json_data]
+	image_bytes: bytes = sparkline(response_data)
+	return Response(content=image_bytes, media_type="image/png")
 
 @app.get("/data")
 @jinja.page("data.html")

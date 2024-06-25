@@ -6,3 +6,4 @@ pyserial
 fasthx
 pydantic
 Jinja2
+matplotlib
