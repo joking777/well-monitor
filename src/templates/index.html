@@ -9,9 +9,11 @@
         <p><span class="label">Depth:</span> {{ depth }}</p>
         <p><span class="label">Temperature:</span> {{ '%.2f'|format(temperature) }}</p>
         <p><span class="label">Barometer:</span> {{ '%.2f'|format(barometer)}}</p>
-
-        
     </div>
+</div>
+
+<div class="container">
+    <img src="/api/sparkline"/>
 </div>
 
 {% endblock content %}

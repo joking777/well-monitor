@@ -2,11 +2,25 @@
 
 {% block content %}
 
-<ul class="list-group">
-    {% for reading in items %}
-        <li class="list-group-item"> Timestamp: {{reading.timestamp}} Depth: {{reading.depth}} Temperature: {{reading.temperature}}</li>
-    {% endfor %}
-</ul>
+<table class="table table-sm table-striped table-hover">
+    <thead class="table-light">
+        <tr>
+            <th scope="col" class="col-1">Timestamp</th>
+            <th scope="col" class="col-1">Depth</th>
+            <th scope="col" class="col-1">Temperature</th>
+            <th scope="col" class="col-1">Barometer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reading in items %}
+        <tr>
+            <td>{{reading.timestamp}}</td>
+            <td>{{reading.depth}}</td>
+            <td>{{reading.temperature}}</td>
+            <td>{{reading.barometer}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock content %}
-
