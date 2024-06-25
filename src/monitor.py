@@ -14,6 +14,9 @@ serial_port = os.environ.get('SERIAL_PORT', '/dev/ttyUSB0')
 baud_rate = os.environ.get('BAUD_RATE', 19200)
 data_size = os.environ.get('DATA_SIZE', 99)
 log_interval = os.environ.get('LOG_INTERVAL', 10)
+timestamp_format = "%Y/%m/%d %H:%M:%S"
+last_logged_key = "last_logged"
+data_key = "data"
 
 # TODO - check if redis is connected
 
@@ -36,11 +39,15 @@ while True:
         )
     
     # only record if it has been more than the log interval
-    last_logged = datetime.strptime(_redis_client.get("last_logged").decode(), "%Y-%m-%d %H:%M:%S.%f")
-    current_logged = datetime.strptime(reading.timestamp, "%Y/%m/%d %H:%M:%S")
-    if last_logged + timedelta(minutes = int(log_interval)) < current_logged:
+    log_event = True
+    if _redis_client.exists(last_logged_key):
+        last_logged = datetime.strptime(_redis_client.get(last_logged_key).decode(), timestamp_format)
+        current_logged = datetime.strptime(reading.timestamp, timestamp_format)
+        log_event = last_logged + timedelta(minutes = int(log_interval)) < current_logged
+
+    if log_event:
         _logger.info("Logging data...")
         _logger.info(output)
-        _redis_client.set("last_logged",timestamp)
-        _redis_client.lpush("data", reading.model_dump_json())
-        _redis_client.ltrim("data", 0, data_size)
+        _redis_client.set(last_logged_key,reading.timestamp)
+        _redis_client.lpush(data_key, reading.model_dump_json())
+        _redis_client.ltrim(data_key, 0, data_size)
