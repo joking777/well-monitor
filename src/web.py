@@ -25,7 +25,7 @@ jinja = Jinja(templates)
 @app.get("/")
 @jinja.page("index.html")
 def index() -> Reading:
-	data = _redis_client.lrange("data", 0, 0)[0]
+	data = _redis_client.get("current_reading")
 	item = json.loads(data)
 	response = Reading(
 		timestamp=item['timestamp'], 
@@ -43,7 +43,7 @@ def get_status():
 
 @app.get("/api/current")
 def get_current():
-	data = _redis_client.lrange("data", 0, 0)[0]
+	data = _redis_client.get("current_reading")
 	return json.loads(data)
 
 @app.get("/api/sparkline", responses = { 200: { "content": { "image/png": {} } } } )

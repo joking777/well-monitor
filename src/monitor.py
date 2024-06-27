@@ -15,6 +15,7 @@ baud_rate = os.environ.get('BAUD_RATE', 19200)
 data_size = os.environ.get('DATA_SIZE', 99)
 log_interval = os.environ.get('LOG_INTERVAL', 10)
 timestamp_format = "%Y/%m/%d %H:%M:%S"
+current_reading = "current_reading"
 last_logged_key = "last_logged"
 data_key = "data"
 
@@ -37,6 +38,8 @@ while True:
         temperature=float(output[38:43]),
         barometer=float(output[45:50]),
         )
+    
+    _redis_client.set("current_reading", reading.model_dump_json())
     
     # only record if it has been more than the log interval
     log_event = True
