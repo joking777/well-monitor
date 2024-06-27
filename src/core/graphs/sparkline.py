@@ -6,7 +6,7 @@ matplotlib.use("Agg")
 
 def sparkline(data):
     # plot it
-    fig, ax = plt.subplots(1,1,figsize=(5,1))
+    fig, ax = plt.subplots(1,1,figsize=(2,.5))
     plt.plot(data, color='k')
     plt.plot(len(data)-1, data[-1], color='r', marker='o')
 
