@@ -51,6 +51,7 @@ def get_sparkline():
 	data = _redis_client.lrange("data", 0, 100)
 	json_data = [json.loads(item) for item in data]
 	response_data = [item['depth'] for item in json_data]
+	response_data.reverse()
 	image_bytes: bytes = sparkline(response_data)
 	return Response(content=image_bytes, media_type="image/png")
 
