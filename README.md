@@ -80,6 +80,12 @@ and connect using `cu`
 sudo cu -s 19200 -l /dev/tty.usbserial-A6005kdh
 ```
 
+On Raspberry Pi to download the logged data
+
+```
+screen /dev/ttyUSB0 19200
+```
+
 ## Inspiration
 
 - https://www.youtube.com/watch?v=6OxqiEeCvMI
